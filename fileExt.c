@@ -9,7 +9,7 @@ char* replace(const char *str, const char *origin, const char *replace);
 int upperFile(FILE *in, FILE *upper);
 int copyFile(FILE *in, FILE *out);
 int replaceFile(FILE *in, FILE *rep);
-int reverseFile(FILE *in, FILE *rep);
+int reverseFile(FILE *in, FILE *reverse);
 
 int main()
 {
@@ -19,9 +19,15 @@ int main()
     FILE *upper = fopen("uppercase.txt" , "w");
     FILE *reverse = fopen("reversed.txt", "w");
 
-    if (in == NULL || out == NULL || rep == NULL || upper == NULL)
+    if (in == NULL || out == NULL || rep == NULL || upper == NULL || reverse == NULL)
     {
         printf("can not open files");
+        // 先关闭任何已打开的
+        if (in) fclose(in);
+        if (out) fclose(out);
+        if (rep) fclose(rep);
+        if (upper) fclose(upper);
+        if (reverse) fclose(reverse);
         return 1;
     }
 
@@ -44,12 +50,12 @@ int main()
 }
 
 // 替换字符串中的特定子串
-char* replace(const char *str, const char *origin, const char *replace)
+char* replace(const char *str, const char *originStr, const char *replaceStr)
 {
-    if (str == NULL || origin == NULL || replace == NULL) {
+    if (str == NULL || originStr == NULL || replaceStr == NULL) {
         return NULL;
     }
-    char *pos = strstr(str, origin);
+    char *pos = strstr(str, originStr);
     if (pos == NULL) {
         // 如果找不到，返回原字符串的拷贝
         char *copy = malloc(strlen(str) + 1);
@@ -57,16 +63,14 @@ char* replace(const char *str, const char *origin, const char *replace)
         return copy;
     }
 
-    const size_t newLen = strlen(str) - strlen(origin) + strlen(replace);
+    const size_t newLen = strlen(str) - strlen(originStr) + strlen(replaceStr);
     char *rep = malloc(newLen + 1);
     size_t index = pos - str;
 
     strncpy(rep, str, index);
     rep[index] = '\0';
-
-    strcat(rep, replace);
-
-    strcat(rep, pos + strlen(origin));
+    strcat(rep, replaceStr);
+    strcat(rep, pos + strlen(originStr));
 
     return rep;
 }
@@ -74,28 +78,17 @@ char* replace(const char *str, const char *origin, const char *replace)
 // 复制文件内容到另一个文件
 int copyFile(FILE *in, FILE *out)
 {
-    if (in == NULL || out == NULL)
-    {
-        return 1;
-    }
-
     char line[100] = "";
     while (fgets(line, sizeof(line), in))
     {
         fprintf(out, "%s", line);
     }
-
     return 0;
 }
 
 // 把文件中的小写字母转换为大写字母
 int upperFile(FILE *in, FILE *upper)
 {
-    if (in == NULL || upper == NULL)
-    {
-        return 1;
-    }
-
     int ch;
     while ((ch = fgetc(in)) != EOF)
     {
@@ -106,7 +99,6 @@ int upperFile(FILE *in, FILE *upper)
 
         fputc(ch, upper);
     }
-
     return 0;
 }
 
@@ -120,6 +112,7 @@ int replaceFile(FILE *in, FILE *rep)
         {
             char *newLine = replace(line, "line", "sentence");
             fprintf(rep, "%s", newLine);
+            free(newLine);
         } else
         {
             fprintf(rep, "%s", line);
@@ -155,21 +148,13 @@ int reverseFile(FILE *in, FILE *reverse)
         }
     }
 
-    if (line[strlen(line) -1] != '\n')
-    {
-        size_t len = strlen(line);
-        if (len + 1 < sizeof(wholeLine)) { // 预留 '\0'
-            strcat(wholeLine, "\n");
-        }
-        lineNum += 1;
-
+    if (wholeLine[0] != '\0') {
+        // 这就是最后一行，直接当一行 push 到 rev[]
         rev = realloc(rev, (size + 1) * sizeof(char*));
         rev[size] = malloc(strlen(wholeLine) + 1);
         strcpy(rev[size], wholeLine);
         size += 1;
-
-        // 两种清空字符串的方式
-        wholeLine[0] = '\0';
+        lineNum += 1;
     }
 
     printf("\nnum of lines is %d\n", lineNum);
