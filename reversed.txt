@@ -1,0 +1,6 @@
+Try to count the number of characters, words, or lines.Try to count the number of characters, words, or lines.Try to count the number of characters, words, or lines.
+
+You can use C to read this file line by line.
+Each line contains some words.
+This is a test file.
+Hello, world!
