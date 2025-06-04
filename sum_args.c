@@ -17,8 +17,11 @@ int main(int argc, char **args)
     }
 
     printf("sum is %d", sum);
+    return 0;
 }
 
+// 将字符串转换为数字
+// 如果数字较大，可以把返回值改为 long long 类型
 int toNum(char *str)
 {
     size_t len = strlen(str);
@@ -27,7 +30,7 @@ int toNum(char *str)
     int first = 0;
     int powTime = 0;
 
-    if (str[0] == '-')
+    if (str[0] == '-' && len > 1)
     {
         minus = 1;
         first += 1;
@@ -53,6 +56,8 @@ int toNum(char *str)
     return res;
 }
 
+// 计算 num 的 powTime 次方
+// 如果数字较大，可以把返回值改为 long long 类型
 int pow_int(int num, int powTime)
 {
     int res = 1;
