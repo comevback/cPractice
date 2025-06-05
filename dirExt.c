@@ -7,6 +7,7 @@
 #include <string.h>
 
 int scanDir(const char *path, int recursive);
+int checkSuffix(const char *filename, const char *suffix);
 
 int main()
 {
@@ -14,6 +15,7 @@ int main()
     scanDir(path, 1);
 }
 
+// 扫描目录，查找指定后缀的文件，可以递归查找，可以指定递归深度
 int scanDir(const char *path, int recursive)
 {
     if (recursive < 0)
@@ -32,7 +34,10 @@ int scanDir(const char *path, int recursive)
     {
         if (entry -> d_type == DT_REG)
         {
-            printf("found file: %s%s\n", path, entry->d_name);
+            if (checkSuffix(entry->d_name, "txt"))
+            {
+                printf("found file: %s%s\n", path, entry->d_name);
+            }
         }
 
         if (entry -> d_type == DT_DIR)
@@ -42,7 +47,7 @@ int scanDir(const char *path, int recursive)
                 continue;
             }
 
-            printf("found dir: %s/%s\n", path, entry->d_name);
+            // printf("found dir: %s/%s\n", path, entry->d_name);
 
             // char *newPath = malloc(1024 * sizeof(char));
             // snprintf(newPath, 1024, "%s/%s", path, entry->d_name);
@@ -67,4 +72,24 @@ int scanDir(const char *path, int recursive)
 
     closedir(d);
     return 0;
+}
+
+// 检测文件名是否以指定后缀结尾
+int checkSuffix(const char *filename, const char *suffix)
+{
+    size_t fileLen = strlen(filename);
+    size_t fixLen = strlen(suffix);
+    if (fileLen < fixLen)
+    {
+        return 0;
+    }
+
+    if (fixLen == 0)
+    {
+        return 1;
+    }
+
+    const size_t index = fileLen - fixLen;
+    const int res = strcmp(filename + index, suffix) == 0;
+    return res;
 }
