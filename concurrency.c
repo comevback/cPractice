@@ -70,7 +70,7 @@ int main()
 
 /**
  * 线程执行函数的实现
- * @param arg 线程参数(本例中未使用)
+ * @param arg 线程参数
  * @return 返回NULL表示成功完成
  */
 void *start_thread(void *arg)
