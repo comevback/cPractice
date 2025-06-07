@@ -36,9 +36,6 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    // 打印主线程ID
-    printf("main thread begins with thread pid: %lu\n", pthread_self());
-
     // 在主线程中也调用线程函数
     // 这将导致相同的函数在两个线程中执行
     start_thread(arg);
@@ -51,6 +48,9 @@ int main()
         perror("pthread_join failed");
         exit(EXIT_FAILURE);
     }
+
+    // 打印主线程ID
+    printf("main thread begins with thread pid: %lu\n", pthread_self());
 
     return 0;
 }
