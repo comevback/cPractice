@@ -50,6 +50,8 @@ int main()
     // NULL: 不关心线程的返回值
     // 如果需要获取线程返回值，可以传入一个指向void*的指针
     void *ptr = NULL;
+    // pthread_join() 需要修改主线程中某个“指针变量”的值，所以必须传入该变量的地址 → void **
+    // 所以要用二级指针来接收线程的返回值
     int join_res = pthread_join(pid, &ptr);
     if (join_res != 0) {
         perror("pthread_join failed");
