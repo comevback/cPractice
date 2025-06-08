@@ -18,9 +18,15 @@
  * @return 线程的返回值
  */
 void *start_thread(void *arg);
+void* writeNum(void* arg);
+void* readNum(void* arg);
+int rw_main();
+
 int number = 1;  // 全局变量，用于在不同线程中被加一，试验线程锁。
 const int MAX = 10;  // 定义一个常量，表示最大值
+
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;  // 初始化互斥锁
+pthread_rwlock_t rwlock = PTHREAD_RWLOCK_INITIALIZER;  // 初始化读写锁
 
 int main()
 {
@@ -52,6 +58,38 @@ int main()
 
     // 打印主线程ID
     printf("main thread begins with thread pid: %lu\n", (unsigned long)pthread_self());
+
+    // rw_main();
+    return 0;
+}
+
+int rw_main()
+{
+    pthread_t rpid[5];  // 定义5个读线程
+    pthread_t wpid[3];  // 定义2个写线程
+
+    for (int i = 0; i < 5; i++)
+    {
+        pthread_create(&rpid[i], NULL, readNum, NULL);  // 创建读线程
+    }
+
+    for (int i = 0; i < 3; i++)
+    {
+        pthread_create(&wpid[i], NULL, writeNum, NULL);  // 创建写线程
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+        pthread_join(rpid[i], NULL);  // 等待所有读线程结束
+    }
+
+    for (int i = 0; i < 3; i++)
+    {
+        pthread_join(wpid[i], NULL);  // 等待写线程结束
+    }
+
+    printf("all threads finished\n");
+    pthread_rwlock_destroy(&rwlock);  // 销毁读写锁
     return 0;
 }
 
@@ -73,5 +111,35 @@ void *start_thread(void *arg)
         pthread_mutex_unlock(&lock);  // 解锁，允许其他线程访问共享资源
 
         //usleep(1);  // 模拟一些工作，休眠1秒
+    }
+}
+
+// 写的线程的处理函数
+void* writeNum(void* arg)
+{
+    for (int i = 0; i < MAX; i++)  // 循环10次
+    {
+        pthread_rwlock_wrlock(&rwlock);
+        int cur = number;
+        cur ++;
+        number = cur;
+        printf("+1写操作完毕, number : %d, tid = %ld\n", number, pthread_self());
+        pthread_rwlock_unlock(&rwlock);
+        // 添加sleep目的是要看到多个线程交替工作
+        usleep(rand() % 100);
+    }
+}
+
+// 读线程的处理函数
+// 多个线程可以如果处理动作相同, 可以使用相同的处理函数
+// 每个线程中的栈资源是独享
+void* readNum(void* arg)
+{
+    for (int i = 0; i < MAX; i++)  // 循环10次
+    {
+        pthread_rwlock_rdlock(&rwlock);
+        printf("全局变量number = %d, tid = %ld\n", number, pthread_self());
+        pthread_rwlock_unlock(&rwlock);
+        usleep(rand() % 100);
     }
 }
