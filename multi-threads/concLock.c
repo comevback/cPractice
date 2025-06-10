@@ -18,8 +18,8 @@
  * @return 线程的返回值
  */
 void *start_thread(void *arg);
-void* writeNum(void* arg);
-void* readNum(void* arg);
+void *writeNum(void* arg);
+void *readNum(void* arg);
 int rw_main();
 
 int number = 1;  // 全局变量，用于在不同线程中被加一，试验线程锁。
