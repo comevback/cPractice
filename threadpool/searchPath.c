@@ -7,6 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <regex.h>
+#include <sys/time.h>
 
 #include "threadpool.h"
 
@@ -21,6 +22,10 @@ struct taskBody
 
 int main(const int argc, char *argv[])
 {
+    // 记录开始时间
+    struct timeval start_time, end_time;
+    gettimeofday(&start_time, NULL);
+
     if (argc != 3)
     {
         printf("should have 3 argument");
@@ -30,11 +35,17 @@ int main(const int argc, char *argv[])
     const char *path = (char*) argv[1];
     const char *target = (char*) argv[2];
 
-    struct ThreadPool *pool = ThreadPoolCreate(20, 5, 100);
+    struct ThreadPool *pool = ThreadPoolCreate(30, 3, 100);
     search(path, target, pool);
 
     sleep(30);
     ThreadPoolDestroy(pool);
+
+    gettimeofday(&end_time, NULL);
+    double time_used = ((end_time.tv_sec - start_time.tv_sec) * 1000000u +
+                       end_time.tv_usec - start_time.tv_usec) / 1.0e6;
+    printf("[Time] Spent: %.6f s\n", time_used);
+    return 0;
 }
 
 void search(const char *path, const char *target, struct ThreadPool *pool)
@@ -48,6 +59,11 @@ void search(const char *path, const char *target, struct ThreadPool *pool)
     ThreadPoolAdd(pool, regex, task_body);
 
     DIR *dir = opendir(path);
+    if (!dir) {
+        printf("[warning] Can not open dir:  %s\n", path);
+        return;
+    }
+
     struct dirent *entry;
     while ((entry = readdir(dir)) != NULL)
     {
@@ -84,7 +100,7 @@ void regex(void *arg)
 
     DIR *dir = opendir(path);
     if (!dir) {
-        printf("无法打开目录: %s\n", path);
+        printf("[warning] Can not open dir:  %s\n", path);
         regfree(&reg);
         return;
     }
@@ -96,7 +112,7 @@ void regex(void *arg)
         {
             if (regexec(&reg, entry->d_name, 0, NULL, 0) == 0)
             {
-                printf("Successfully matched the file:\n %s-%s\n", path, entry->d_name);
+                printf("Successfully matched the file: %s : %s\n", path, entry->d_name);
             }
         }
 
@@ -104,5 +120,6 @@ void regex(void *arg)
 
     closedir(dir);
     regfree(&reg);
+    usleep(5000); // 模拟处理时间
     return;
 }

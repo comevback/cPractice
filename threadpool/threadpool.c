@@ -383,6 +383,7 @@ void *manager(void *arg)
         }
 
         pthread_mutex_lock(&pool->mutex_pool);
+        printf("total task num : %d\n", pool->QueueSize);
         printf("total live threads: %d\n", pool->liveNum);
         pthread_mutex_unlock(&pool->mutex_pool);
     }
