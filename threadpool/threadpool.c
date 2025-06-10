@@ -311,7 +311,7 @@ void *worker(void *arg)
         pthread_mutex_unlock(&pool->mutex_busy);
 
         task.func(task.arg);
-        free(task.arg);
+        free(task.arg);  // 这里释放任务参数内存，所以在给的任务函数中不需要再释放
         task.arg = NULL;
 
         pthread_mutex_lock(&pool->mutex_busy);
