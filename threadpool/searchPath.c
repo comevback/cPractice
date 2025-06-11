@@ -174,9 +174,11 @@ void search(const char *path, regex_t *reg, FILE *write, struct ThreadPool *pool
                 continue;
             }
 
-            char newPath[1024];
-            snprintf(newPath, sizeof(newPath), "%s/%s", path, entry->d_name);
+            size_t len = strlen(path) + strlen(entry->d_name) + 2; // +2 for '/' and '\0'
+            char *newPath = malloc(len);
+            snprintf(newPath, len, "%s/%s", path, entry->d_name);
             search(newPath, reg, write, pool);
+            free(newPath);
         }
     }
     closedir(dir);

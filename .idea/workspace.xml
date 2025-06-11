@@ -16,7 +16,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65800a24-0150-485a-9655-b6478c32dbd1" name="Changes" comment="refactor searchPath to simplify output handling and improve file writing logic">
+    <list default="true" id="65800a24-0150-485a-9655-b6478c32dbd1" name="Changes" comment="refactor searchPath to improve resource cleanup and timing output">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/threadpool/searchPath" beforeDir="false" afterPath="$PROJECT_DIR$/threadpool/searchPath" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/threadpool/searchPath.c" beforeDir="false" afterPath="$PROJECT_DIR$/threadpool/searchPath.c" afterDir="false" />
     </list>
@@ -123,7 +124,7 @@
       <workItem from="1749444930603" duration="10978000" />
       <workItem from="1749509455957" duration="16036000" />
       <workItem from="1749544268548" duration="18094000" />
-      <workItem from="1749593089508" duration="19512000" />
+      <workItem from="1749593089508" duration="20854000" />
     </task>
     <task id="LOCAL-00001" summary="add initial project files and C program for text processing">
       <option name="closed" value="true" />
@@ -309,7 +310,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749613126012</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="refactor searchPath to improve resource cleanup and timing output">
+      <option name="closed" value="true" />
+      <created>1749614904754</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1749614904754</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -336,7 +345,8 @@
     <MESSAGE value="add timing measurement and improve error handling in searchPath" />
     <MESSAGE value="refactor the Cgrep tool" />
     <MESSAGE value="refactor searchPath to simplify output handling and improve file writing logic" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor searchPath to simplify output handling and improve file writing logic" />
+    <MESSAGE value="refactor searchPath to improve resource cleanup and timing output" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor searchPath to improve resource cleanup and timing output" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
