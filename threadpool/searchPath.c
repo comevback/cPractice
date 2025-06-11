@@ -9,8 +9,12 @@
 #include <unistd.h>
 #include <regex.h>
 #include <sys/time.h>
+#include <pthread.h>
 
 #include "threadpool.h"
+
+// 全局文件写入互斥锁，防止多线程同时写入同一文件导致数据混乱
+pthread_mutex_t file_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void search(const char *path, regex_t *reg, FILE *write, struct ThreadPool *pool);
 void regex(void *arg);
@@ -113,7 +117,7 @@ int main(const int argc, char *argv[])
 
     struct ThreadPool *pool = ThreadPoolCreate(30, 3, 100);
     search(path, &reg, write, pool);
-    sleep(1); // 等待所有任务入队
+    sleep(1); // 等待所有任务入队，不然立即检查时，如果busyNum为0，可能还没开始就退出了
 
     // 等所有 worker 退出
     while (1) {
@@ -210,7 +214,9 @@ void regex(void *arg)
         {
             if (regexec(reg, entry->d_name, 0, NULL, 0) == 0)
             {
+                pthread_mutex_lock(&file_mutex);
                 fprintf(write ,"Successfully matched the file: %s : %s\n", path, entry->d_name);
+                pthread_mutex_unlock(&file_mutex);
             }
         }
     }
