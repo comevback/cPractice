@@ -10,13 +10,12 @@
 #include <regex.h>
 #include <sys/time.h>
 #include <pthread.h>
-
 #include "threadpool.h"
 
 // 全局文件写入互斥锁，防止多线程同时写入同一文件导致数据混乱
 pthread_mutex_t file_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-void search(const char *path, char *namePattern, regex_t *reg, FILE *write, struct ThreadPool *pool);
+void traverseAndScheduleSearch(const char *path, char *namePattern, regex_t *reg, FILE *write, struct ThreadPool *pool);
 void findWithPattern(void *arg);
 void findWithRegex(void *arg);
 int matchPattern(const char *filename, const char *pattern);
@@ -97,7 +96,7 @@ int main(const int argc, char *argv[])
     // 如果没有指定路径，使用当前目录
     if (!nameRegex && !namePattern)
     {
-        printf("[Warning] file pattern is required.\n");
+        printf("[Warning] Must specify either a regex or a name pattern.\n");
         return 1;
     }
 
@@ -112,10 +111,7 @@ int main(const int argc, char *argv[])
             regfree(&real_reg);
             return 1;
         }
-        reg = &real_reg; // 如果编译成功，则使用编译后的正则表达式
-    } else
-    {
-        reg = NULL; // 如果没有正则表达式，则设置为NULL
+        reg = &real_reg;
     }
 
     // 如果没有指定输出文件，默认输出到标准输出
@@ -127,28 +123,26 @@ int main(const int argc, char *argv[])
     }
 
     struct ThreadPool *pool = ThreadPoolCreate(30, 3, 100);
-    search(path, namePattern, reg, write, pool);
+    traverseAndScheduleSearch(path, namePattern, reg, write, pool);
     sleep(1); // 等待所有任务入队，不然立即检查时，如果busyNum为0，可能还没开始就退出了
     ThreadPoolWaitAndDestroy(pool);
 
     // 释放资源
-    if (reg)
-    {
-        regfree(reg);
-    }
+    if (reg) {regfree(reg);}
     fclose(write);
     return 0;
 }
 
-/* * 递归搜索指定路径下的所有子目录和文件
+/* * 递归搜索指定路径下的所有子目录
  * 如果匹配正则表达式，则将结果写入到指定文件或标准输出
  *
  * @param path 需要搜索的路径
  * @param reg 正则表达式
+ * @param namePattern 文件名模式字符串
  * @param write 输出文件指针，如果为NULL则输出到标准输出
  * @param pool 线程池指针
  */
-void search(const char *path, char* namePattern, regex_t *reg, FILE *write, struct ThreadPool *pool)
+void traverseAndScheduleSearch(const char *path, char* namePattern, regex_t *reg, FILE *write, struct ThreadPool *pool)
 {
     // 在堆中构造任务体，释放是在regex函数中完成的
     struct taskBody *task_body = malloc(sizeof(struct taskBody));
@@ -199,7 +193,7 @@ void search(const char *path, char* namePattern, regex_t *reg, FILE *write, stru
             size_t len = strlen(path) + strlen(entry->d_name) + 2; // +2 for '/' and '\0'
             char *newPath = malloc(len);
             snprintf(newPath, len, "%s/%s", path, entry->d_name);
-            search(newPath, namePattern, reg, write, pool);
+            traverseAndScheduleSearch(newPath, namePattern, reg, write, pool);
             free(newPath);
         }
     }
