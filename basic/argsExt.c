@@ -26,7 +26,7 @@ int main(const int argc, char *argv[])
             {
                 verbose_level = atoi(optarg);
                 printf("verbose level is %d\n", verbose_level);
-            }else
+            } else
             {
                 printf("lack of verbose_level\n");
                 printf("verbose level is %d\n", 1);
