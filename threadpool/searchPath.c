@@ -94,13 +94,6 @@ int main(const int argc, char *argv[])
         return 1;
     }
 
-    // 如果没有指定输出文件，直接把结果输出到标准输出
-    if (!outfile || strcmp(outfile, "") == 0)
-    {
-        printf("[Warning] Output file is not specified, results will be printed to stdout.\n");
-        outfile = NULL;
-    }
-
     // 编译正则表达式
     regex_t reg;
     if (regcomp(&reg, nameRegex, REG_EXTENDED) != 0)
@@ -110,11 +103,12 @@ int main(const int argc, char *argv[])
         return 1;
     }
 
-    FILE *write = fopen(outfile, "a");
+    // 如果没有指定输出文件，默认输出到标准输出
+    FILE *write = outfile ? fopen(outfile,"a") : stdout;
     if (!write)
     {
         printf("Fail to open the file for writing\n");
-        // return 1;
+        return 1;
     }
 
     struct ThreadPool *pool = ThreadPoolCreate(30, 3, 100);
@@ -212,13 +206,7 @@ void regex(void *arg)
         {
             if (regexec(reg, entry->d_name, 0, NULL, 0) == 0)
             {
-                if (write == NULL)
-                {
-                    printf("Successfully matched the file: %s : %s\n", path, entry->d_name);
-                } else
-                {
-                    fprintf(write ,"Successfully matched the file: %s : %s\n", path, entry->d_name);
-                }
+                fprintf(write ,"Successfully matched the file: %s : %s\n", path, entry->d_name);
             }
         }
     }
