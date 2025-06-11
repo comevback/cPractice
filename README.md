@@ -1,6 +1,7 @@
 # C语言线程池实现
 
-[pfind](./threadpool/pfind.md) : 基于此线程池实现的高效多线程文件搜索工具
+[pfind](./threadpool/pfind.md) : 基于此线程池实现的高效多线程文件搜索工具\
+[pfind_en](./threadpool/pfind_en.md) : A high-performance multithreaded file search tool based on this thread pool implementation
 
 ---
 
