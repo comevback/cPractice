@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 #define CHANGE_NUM 2
 
@@ -14,10 +15,14 @@ void *worker(void *arg);
 void *manager(void *arg);
 void threadDestroy(struct ThreadPool *pool);
 struct ThreadPool* ThreadPoolCreate(int max, int min, int cap);
-void ThreadPoolAdd(struct ThreadPool *pool, void (*func)(void *arg), void *arg);
+int ThreadPoolAdd(struct ThreadPool *pool, void (*func)(void *arg), void *arg);
 int getThreadLiveNum(struct ThreadPool *pool);
 int getThreadBusyNum(struct ThreadPool *pool);
 int ThreadPoolDestroy (struct ThreadPool *pool);
+void ThreadPoolWaitAndDestroy(struct ThreadPool *pool);
+int getThreadQueueSize(struct ThreadPool *pool);
+
+struct timeval start_time, end_time;
 
 struct Task
 {
@@ -58,7 +63,8 @@ struct ThreadPool
 // 创建线程池函数
 struct ThreadPool* ThreadPoolCreate(int max, int min, int cap)
 {
-    printf("[Main] Creating Pool...\n");
+    // 记录开始时间
+    gettimeofday(&start_time, NULL);
 
     struct ThreadPool *pool = malloc(sizeof(struct ThreadPool));
     do
@@ -114,7 +120,7 @@ struct ThreadPool* ThreadPoolCreate(int max, int min, int cap)
 
         printf("total live threads: %d\n", pool->liveNum);
         return pool;
-    }while (0);
+    } while (0);
     if (pool->workers)
     {
         free(pool->workers);
@@ -127,7 +133,6 @@ struct ThreadPool* ThreadPoolCreate(int max, int min, int cap)
     {
         free(pool);
     }
-
     return NULL;
 }
 
@@ -135,7 +140,6 @@ struct ThreadPool* ThreadPoolCreate(int max, int min, int cap)
 int ThreadPoolDestroy (struct ThreadPool *pool)
 {
     printf("[Main] Shutting down... broadcasting to all worker threads.\n");
-
     if (pool == NULL)
     {
         printf("pool not exist\n");
@@ -177,15 +181,26 @@ int ThreadPoolDestroy (struct ThreadPool *pool)
         free(pool->workers);
     }
 
+    // 记录结束时间并计算耗时
+    gettimeofday(&end_time, NULL);
+    double time_used = ((end_time.tv_sec - start_time.tv_sec) * 1000000u +
+                       end_time.tv_usec - start_time.tv_usec) / 1.0e6;
+    printf("[Time] Spent: %.2f s\n", time_used);
+
     free(pool);
     pool = NULL;
-
     return 0;
 }
 
 // 添加任务到线程池函数
-void ThreadPoolAdd(struct ThreadPool *pool, void (*func)(void *arg), void *arg)
+int ThreadPoolAdd(struct ThreadPool *pool, void (*func)(void *arg), void *arg)
 {
+    if (pool == NULL || func == NULL)
+    {
+        printf("pool or func not exist\n");
+        return -1; // 线程池或任务函数不存在
+    }
+
     struct Task task;
     task.arg = arg;
     task.func = func;
@@ -201,14 +216,14 @@ void ThreadPoolAdd(struct ThreadPool *pool, void (*func)(void *arg), void *arg)
     {
         printf("pool already shutdown\n");
         pthread_mutex_unlock(&pool->mutex_pool);
-        return;
+        return -1; // 线程池已关闭，无法添加任务
     }
 
     if (pool->QueueSize >= pool->QueueCapacity)
     {
         printf("task queue full, can not add\n");
         pthread_mutex_unlock(&pool->mutex_pool);
-        return;
+        return -1; // 任务队列已满，无法添加任务
     }
 
     pool->taskQueue[pool->QueueRear] = task;
@@ -217,6 +232,27 @@ void ThreadPoolAdd(struct ThreadPool *pool, void (*func)(void *arg), void *arg)
 
     pthread_mutex_unlock(&pool->mutex_pool);
     pthread_cond_signal(&pool->not_empty);
+
+    return 0; // 成功添加任务
+}
+
+// 等待所有任务完成再销毁线程池函数
+void ThreadPoolWaitAndDestroy(struct ThreadPool *pool)
+{
+    if (pool == NULL)
+    {
+        printf("pool not exist\n");
+        return;
+    }
+
+    // 等待所有任务完成
+    while (getThreadBusyNum(pool) > 0 || getThreadQueueSize(pool) > 0)
+    {
+        usleep(1000); // 等待1毫秒
+    }
+
+    // 等待所有工作线程退出后就可以销毁线程池
+    ThreadPoolDestroy(pool);
 }
 
 // 销毁单个线程函数
@@ -254,6 +290,14 @@ int getThreadBusyNum(struct ThreadPool *pool)
     int busyNum = pool->busyNum;
     pthread_mutex_unlock(&pool->mutex_busy);
     return busyNum;
+}
+
+int getThreadQueueSize(struct ThreadPool *pool)
+{
+    pthread_mutex_lock(&pool->mutex_pool);
+    int queueSize = pool->QueueSize;
+    pthread_mutex_unlock(&pool->mutex_pool);
+    return queueSize;
 }
 
 /** * 工作线程函数，循环从任务队列中取出任务并执行
@@ -311,8 +355,6 @@ void *worker(void *arg)
         pthread_mutex_unlock(&pool->mutex_busy);
 
         task.func(task.arg);
-        free(task.arg);  // 这里释放任务参数内存，所以在给的任务函数中不需要再释放
-        task.arg = NULL;
 
         pthread_mutex_lock(&pool->mutex_busy);
         pool->busyNum -= 1;

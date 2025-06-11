@@ -38,11 +38,6 @@ struct taskBody
  */
 int main(const int argc, char *argv[])
 {
-    // 记录开始时间
-    struct timeval start_time, end_time;
-    gettimeofday(&start_time, NULL);
-
-
     char *path   = ".";
     char *nameRegex = NULL;
     char *outfile= NULL;
@@ -118,25 +113,7 @@ int main(const int argc, char *argv[])
     struct ThreadPool *pool = ThreadPoolCreate(30, 3, 100);
     search(path, &reg, write, pool);
     sleep(1); // 等待所有任务入队，不然立即检查时，如果busyNum为0，可能还没开始就退出了
-
-    // 等所有 worker 退出
-    while (1) {
-        int live = getThreadBusyNum(pool);
-        if (live == 0)
-        {
-            // 销毁线程池
-            ThreadPoolDestroy(pool);
-            break;
-        }
-        sleep(2);
-    }
-
-
-    // 记录结束时间并计算耗时
-    gettimeofday(&end_time, NULL);
-    double time_used = ((end_time.tv_sec - start_time.tv_sec) * 1000000u +
-                       end_time.tv_usec - start_time.tv_usec) / 1.0e6;
-    printf("[Time] Spent: %.2f s\n", time_used);
+    ThreadPoolWaitAndDestroy(pool);
 
     // 释放资源
     regfree(&reg);
@@ -154,13 +131,20 @@ int main(const int argc, char *argv[])
  */
 void search(const char *path, regex_t *reg, FILE *write, struct ThreadPool *pool)
 {
+    // 在堆中构造任务体，释放是在regex函数中完成的
     struct taskBody *task_body = malloc(sizeof(struct taskBody));
     task_body->path = malloc(sizeof(char) * 1024);
     task_body->reg = reg;
     task_body->write = write;
     strcpy(task_body->path, path);
-    ThreadPoolAdd(pool, regex, task_body);
-    // regex(task_body); // 直接调用函数处理当前目录
+
+    int ret = ThreadPoolAdd(pool, regex, task_body);
+    if (ret != 0) {
+        printf("[Error] Fail to add task to thread pool: %d\n", ret);
+        free(task_body->path);
+        free(task_body);
+        return;
+    }
 
     DIR *dir = opendir(path);
     if (!dir) {
@@ -196,7 +180,7 @@ void search(const char *path, regex_t *reg, FILE *write, struct ThreadPool *pool
  */
 void regex(void *arg)
 {
-    const struct taskBody *task = (struct taskBody*)arg;
+    struct taskBody *task = (struct taskBody*)arg;
     char *path = task->path;
     const regex_t *reg = task->reg;
     FILE *write = task->write;
@@ -204,6 +188,8 @@ void regex(void *arg)
     DIR *dir = opendir(path);
     if (!dir) {
         printf("[warning] Can not open dir:  %s\n", path);
+        free(task->path);
+        free(task);
         return;
     }
 
@@ -221,6 +207,8 @@ void regex(void *arg)
         }
     }
     closedir(dir);
+    free(task->path);
+    free(task); // 释放任务体内存
     usleep(1000); // 模拟处理时间
     return;
 }
