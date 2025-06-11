@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/LiveTemplatesHousekeeping/HotspotSessionHintIsShown/@EntryValue" value="true" type="bool" />
+  </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="65800a24-0150-485a-9655-b6478c32dbd1" name="Changes" comment="refactor searchPath to simplify output handling and improve file writing logic">
+      <change beforePath="$PROJECT_DIR$/threadpool/searchPath" beforeDir="false" afterPath="$PROJECT_DIR$/threadpool/searchPath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/threadpool/searchPath.c" beforeDir="false" afterPath="$PROJECT_DIR$/threadpool/searchPath.c" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;comevback&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/comevback/cPractice.git&quot;,
+    &quot;accountId&quot;: &quot;71b3ff4d-f82b-4ac7-ad72-8a8f2f73d878&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/basic/argsExt.c" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/multi-threads/concLock.c" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/multi-threads/mutex_lock.c" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/threadpool/searchPath.c" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/threadpool/threadpool.c" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2xyWtEHe1AS7D57tPh7Rxk9mn4t" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;C/C++ File.argsExt.c.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.concLock.c (1).executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.concLock.c.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.concurrency.c.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.cond_lock.c.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.dirExt.c.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.fileExt.c.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.hello.c.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.mutex_lock.c (1).executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.mutex_lock.c.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.rw_lock.c (1).executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.rw_lock.c.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.sum_args.c.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ File.testPool.c.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/dundun/Documents/C/threadpool&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;copyright&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/threadpool" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/multi-threads" />
+    </key>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="65800a24-0150-485a-9655-b6478c32dbd1" name="Changes" comment="" />
+      <created>1748911006484</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1748911006484</updated>
+      <workItem from="1748911007711" duration="14000" />
+      <workItem from="1748911025126" duration="2390000" />
+      <workItem from="1748914148336" duration="25682000" />
+      <workItem from="1749020487283" duration="6105000" />
+      <workItem from="1749043703178" duration="8797000" />
+      <workItem from="1749107501080" duration="4194000" />
+      <workItem from="1749128513062" duration="6544000" />
+      <workItem from="1749178404416" duration="6673000" />
+      <workItem from="1749217533858" duration="10154000" />
+      <workItem from="1749376988632" duration="3270000" />
+      <workItem from="1749444930603" duration="10978000" />
+      <workItem from="1749509455957" duration="16036000" />
+      <workItem from="1749544268548" duration="18094000" />
+      <workItem from="1749593089508" duration="19512000" />
+    </task>
+    <task id="LOCAL-00001" summary="add initial project files and C program for text processing">
+      <option name="closed" value="true" />
+      <created>1748947722558</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1748947722558</updated>
+    </task>
+    <task id="LOCAL-00002" summary="refactor file processing functions and add new features">
+      <option name="closed" value="true" />
+      <created>1748949449793</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1748949449793</updated>
+    </task>
+    <task id="LOCAL-00003" summary="refactor file processing functions and add new features">
+      <option name="closed" value="true" />
+      <created>1748949453945</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1748949453945</updated>
+    </task>
+    <task id="LOCAL-00004" summary="refactor file handling and improve error checking">
+      <option name="closed" value="true" />
+      <created>1748950869682</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1748950869682</updated>
+    </task>
+    <task id="LOCAL-00005" summary="refactor file handling and improve error checking">
+      <option name="closed" value="true" />
+      <created>1749025312544</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1749025312544</updated>
+    </task>
+    <task id="LOCAL-00006" summary="add sum_args and improve number conversion logic">
+      <option name="closed" value="true" />
+      <created>1749026451460</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1749026451460</updated>
+    </task>
+    <task id="LOCAL-00007" summary="add directory scanning functionality with recursive option">
+      <option name="closed" value="true" />
+      <created>1749091103278</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1749091103278</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add checkSuffix function to filter files by suffix in directory scan">
+      <option name="closed" value="true" />
+      <created>1749110971477</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1749110971478</updated>
+    </task>
+    <task id="LOCAL-00009" summary="add command-line options for help, output file, and verbose level">
+      <option name="closed" value="true" />
+      <created>1749132850633</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1749132850633</updated>
+    </task>
+    <task id="LOCAL-00010" summary="add concurrency example demonstrating basic usage of POSIX threads">
+      <option name="closed" value="true" />
+      <created>1749201871447</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1749201871447</updated>
+    </task>
+    <task id="LOCAL-00011" summary="add concurrency example demonstrating basic usage of POSIX threads">
+      <option name="closed" value="true" />
+      <created>1749256198425</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1749256198425</updated>
+    </task>
+    <task id="LOCAL-00012" summary="add thread return value handling and person struct in concurrency example">
+      <option name="closed" value="true" />
+      <created>1749263283891</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1749263283891</updated>
+    </task>
+    <task id="LOCAL-00013" summary="update comments in concurrency example to clarify usage of pthread_join with double pointer">
+      <option name="closed" value="true" />
+      <created>1749274756740</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1749274756740</updated>
+    </task>
+    <task id="LOCAL-00014" summary="add concurrency example demonstrating basic usage of POSIX threads with mutex">
+      <option name="closed" value="true" />
+      <created>1749291767832</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1749291767832</updated>
+    </task>
+    <task id="LOCAL-00015" summary="add read-write lock example with multiple reader and writer threads">
+      <option name="closed" value="true" />
+      <created>1749378479967</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1749378479967</updated>
+    </task>
+    <task id="LOCAL-00016" summary="add concurrency examples demonstrating usage of mutex and read-write locks with POSIX threads">
+      <option name="closed" value="true" />
+      <created>1749378721998</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1749378721998</updated>
+    </task>
+    <task id="LOCAL-00017" summary="refactor project">
+      <option name="closed" value="true" />
+      <created>1749444977305</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1749444977305</updated>
+    </task>
+    <task id="LOCAL-00018" summary="add multi-producer/multi-consumer examples using circular buffer and linked list with condition variables">
+      <option name="closed" value="true" />
+      <created>1749453190519</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1749453190519</updated>
+    </task>
+    <task id="LOCAL-00019" summary="add thread pool implementation with task management and worker threads">
+      <option name="closed" value="true" />
+      <created>1749523927355</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1749523927355</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Write a grep with C and multi threads">
+      <option name="closed" value="true" />
+      <created>1749550396134</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1749550396134</updated>
+    </task>
+    <task id="LOCAL-00021" summary="add timing measurement and improve error handling in searchPath">
+      <option name="closed" value="true" />
+      <created>1749562411964</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1749562411964</updated>
+    </task>
+    <task id="LOCAL-00022" summary="refactor the Cgrep tool">
+      <option name="closed" value="true" />
+      <created>1749611424126</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1749611424126</updated>
+    </task>
+    <task id="LOCAL-00023" summary="refactor searchPath to simplify output handling and improve file writing logic">
+      <option name="closed" value="true" />
+      <created>1749613126012</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1749613126012</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add initial project files and C program for text processing" />
+    <MESSAGE value="refactor file processing functions and add new features" />
+    <MESSAGE value="refactor file handling and improve error checking" />
+    <MESSAGE value="add sum_args and improve number conversion logic" />
+    <MESSAGE value="add directory scanning functionality with recursive option" />
+    <MESSAGE value="add checkSuffix function to filter files by suffix in directory scan" />
+    <MESSAGE value="add command-line options for help, output file, and verbose level" />
+    <MESSAGE value="add concurrency example demonstrating basic usage of POSIX threads" />
+    <MESSAGE value="add thread return value handling and person struct in concurrency example" />
+    <MESSAGE value="update comments in concurrency example to clarify usage of pthread_join with double pointer" />
+    <MESSAGE value="add concurrency example demonstrating basic usage of POSIX threads with mutex" />
+    <MESSAGE value="add read-write lock example with multiple reader and writer threads" />
+    <MESSAGE value="add concurrency examples demonstrating usage of mutex and read-write locks with POSIX threads" />
+    <MESSAGE value="refactor project" />
+    <MESSAGE value="add multi-producer/multi-consumer examples using circular buffer and linked list with condition variables" />
+    <MESSAGE value="add thread pool implementation with task management and worker threads" />
+    <MESSAGE value="Write a grep with C and multi threads" />
+    <MESSAGE value="add timing measurement and improve error handling in searchPath" />
+    <MESSAGE value="refactor the Cgrep tool" />
+    <MESSAGE value="refactor searchPath to simplify output handling and improve file writing logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor searchPath to simplify output handling and improve file writing logic" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/multi-threads/concLock.c</url>
+          <line>8</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

@@ -126,15 +126,17 @@ int main(const int argc, char *argv[])
         }
         sleep(2);
     }
-    // 释放资源
-    regfree(&reg);
-    fclose(write);
+
 
     // 记录结束时间并计算耗时
     gettimeofday(&end_time, NULL);
     double time_used = ((end_time.tv_sec - start_time.tv_sec) * 1000000u +
                        end_time.tv_usec - start_time.tv_usec) / 1.0e6;
     printf("[Time] Spent: %.2f s\n", time_used);
+
+    // 释放资源
+    regfree(&reg);
+    fclose(write);
     return 0;
 }
 
