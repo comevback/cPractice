@@ -16,7 +16,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65800a24-0150-485a-9655-b6478c32dbd1" name="Changes" comment="Rename document.md to pfind.md and update README.md with pfind usage documentation" />
+    <list default="true" id="65800a24-0150-485a-9655-b6478c32dbd1" name="Changes" comment="Delete unnecessary files">
+      <change afterPath="$PROJECT_DIR$/threadpool/pfind_en.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -139,6 +142,8 @@
       <workItem from="1749593089508" duration="29544000" />
       <workItem from="1749625683342" duration="4357000" />
       <workItem from="1749640078059" duration="11440000" />
+      <workItem from="1749651572348" duration="56000" />
+      <workItem from="1749652678999" duration="30000" />
     </task>
     <task id="LOCAL-00001" summary="add initial project files and C program for text processing">
       <option name="closed" value="true" />
@@ -404,14 +409,21 @@
       <option name="project" value="LOCAL" />
       <updated>1749651522664</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Delete unnecessary files">
+      <option name="closed" value="true" />
+      <created>1749651622171</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1749651622171</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add checkSuffix function to filter files by suffix in directory scan" />
     <MESSAGE value="add command-line options for help, output file, and verbose level" />
     <MESSAGE value="add concurrency example demonstrating basic usage of POSIX threads" />
     <MESSAGE value="add thread return value handling and person struct in concurrency example" />
@@ -436,7 +448,8 @@
     <MESSAGE value="Rename searchPath to pfind and add usage documentation." />
     <MESSAGE value="Rename searchPath to pfind and update usage documentation" />
     <MESSAGE value="Rename document.md to pfind.md and update README.md with pfind usage documentation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Rename document.md to pfind.md and update README.md with pfind usage documentation" />
+    <MESSAGE value="Delete unnecessary files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Delete unnecessary files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
