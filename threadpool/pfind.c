@@ -229,7 +229,7 @@ void findWithPattern(void *arg)
             if (matchPattern(entry->d_name, namePattern))
             {
                 pthread_mutex_lock(&file_mutex);
-                fprintf(write ,"Successfully matched the file: %s : %s\n", path, entry->d_name);
+                fprintf(write ,"Matched the file: %s : %s\n", path, entry->d_name);
                 pthread_mutex_unlock(&file_mutex);
             }
         }
@@ -270,7 +270,7 @@ void findWithRegex(void *arg)
             if (regexec(reg, entry->d_name, 0, NULL, 0) == 0)
             {
                 pthread_mutex_lock(&file_mutex);
-                fprintf(write, "Successfully matched the file: %s : %s\n", path, entry->d_name);
+                fprintf(write, "Matched the file: %s : %s\n", path, entry->d_name);
                 pthread_mutex_unlock(&file_mutex);
             }
         }

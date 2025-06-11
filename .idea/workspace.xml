@@ -16,9 +16,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65800a24-0150-485a-9655-b6478c32dbd1" name="Changes" comment="refactor searchPath">
+    <list default="true" id="65800a24-0150-485a-9655-b6478c32dbd1" name="Changes" comment="refactor searchPath to rename search function and improve warning messages">
+      <change afterPath="$PROJECT_DIR$/threadpool/document.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/threadpool/searchPath.c" beforeDir="false" afterPath="$PROJECT_DIR$/threadpool/searchPath.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/threadpool/searchPath" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/threadpool/searchPath.c" beforeDir="false" afterPath="$PROJECT_DIR$/threadpool/pfind.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/threadpool/searchResult.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/threadpool/threadpool.c" beforeDir="false" afterPath="$PROJECT_DIR$/threadpool/threadpool.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +145,7 @@
       <workItem from="1749544268548" duration="18094000" />
       <workItem from="1749593089508" duration="29544000" />
       <workItem from="1749625683342" duration="4357000" />
-      <workItem from="1749640078059" duration="8530000" />
+      <workItem from="1749640078059" duration="10537000" />
     </task>
     <task id="LOCAL-00001" summary="add initial project files and C program for text processing">
       <option name="closed" value="true" />
@@ -375,14 +379,21 @@
       <option name="project" value="LOCAL" />
       <updated>1749648034228</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="refactor searchPath to rename search function and improve warning messages">
+      <option name="closed" value="true" />
+      <created>1749648651876</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1749648651876</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="refactor file processing functions and add new features" />
     <MESSAGE value="refactor file handling and improve error checking" />
     <MESSAGE value="add sum_args and improve number conversion logic" />
     <MESSAGE value="add directory scanning functionality with recursive option" />
@@ -407,7 +418,8 @@
     <MESSAGE value="refactor searchPath to improve task management and enhance error handling in thread pool" />
     <MESSAGE value="update README.md to document thread pool implementation and usage examples" />
     <MESSAGE value="refactor searchPath" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor searchPath" />
+    <MESSAGE value="refactor searchPath to rename search function and improve warning messages" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor searchPath to rename search function and improve warning messages" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

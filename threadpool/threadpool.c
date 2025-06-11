@@ -185,7 +185,7 @@ int ThreadPoolDestroy (struct ThreadPool *pool)
     gettimeofday(&end_time, NULL);
     double time_used = ((end_time.tv_sec - start_time.tv_sec) * 1000000u +
                        end_time.tv_usec - start_time.tv_usec) / 1.0e6;
-    printf("[Time] Spent: %.2f s\n", time_used);
+    printf("[Time] Task Spent: %.2f s\n", time_used);
 
     free(pool);
     pool = NULL;
@@ -265,8 +265,8 @@ void threadDestroy(struct ThreadPool *pool)
         if (tid == pool->workers[i])
         {
             pool->workers[i] = 0;
-            printf("destroy the thread %ld\n", (long int)tid);
-            printf("total live threads: %d\n", pool->liveNum);
+            printf("[Action] Destroy the thread %ld\n", (long int)tid);
+            printf("[Status] Total live threads: %d\n", pool->liveNum);
             break;
         }
     }
@@ -325,8 +325,6 @@ void *worker(void *arg)
                 {
                     pool->liveNum -= 1;
                     pthread_mutex_unlock(&pool->mutex_pool);
-                    printf("quit thread %ld\n", (long int)pthread_self());
-                    printf("total live threads: %d\n", pool->liveNum);
                     threadDestroy(pool);
                 }
             }
@@ -336,8 +334,6 @@ void *worker(void *arg)
         {
             pool->liveNum -= 1;
             pthread_mutex_unlock(&pool->mutex_pool);
-            printf("shutdown thread %ld\n", (long int)pthread_self());
-            printf("total live threads: %d\n", pool->liveNum);
             threadDestroy(pool);
         }
 
@@ -394,7 +390,7 @@ void *manager(void *arg)
         // 如果存活线程数量小于目前的任务数量，增加
         if (taskSize > liveNum && liveNum < maxNum)
         {
-            printf("no enough threads, add 2\n");
+            printf("[Action] Threads + %d\n", CHANGE_NUM);
             pthread_mutex_lock(&pool->mutex_pool);
             int count = 0;
             for (int i = 0; i < pool->max && count < CHANGE_NUM && pool->liveNum < pool->max; i++)
@@ -413,7 +409,7 @@ void *manager(void *arg)
         // 如果存活线程数量是目前的繁忙线程数的两倍以上，减少
         if (liveNum > busyNum * 2 && liveNum > minNUm)
         {
-            printf("too many threads, minus 2\n");
+            printf("[Action] Threads - %d\n", CHANGE_NUM);
             pthread_mutex_lock(&pool->mutex_pool);
             pool -> quitNum = CHANGE_NUM;
             pthread_mutex_unlock(&pool->mutex_pool);
@@ -425,8 +421,7 @@ void *manager(void *arg)
         }
 
         pthread_mutex_lock(&pool->mutex_pool);
-        printf("total task num : %d\n", pool->QueueSize);
-        printf("total live threads: %d\n", pool->liveNum);
+        printf("[Status] Total live threads: %d, Busy threads: %d, Queue size: %d\n", pool->liveNum, busyNum, pool->QueueSize);
         pthread_mutex_unlock(&pool->mutex_pool);
     }
     return NULL;
