@@ -28,14 +28,15 @@
 
 1. 从 GitHub Releases 页面下载预编译二进制（例如 `pfind-MacOS`）。  
 2. 赋可执行权限（Linux/macOS）：
+
    ```bash
    chmod +x pfind-MacOS
+   ```
+3. （可选）将其复制到你的 `$PATH` 目录：
 
-3.（可选）将其复制到你的 `$PATH` 目录：
-
-```bash
-sudo mv pfind-MacOS /usr/local/bin/pfind
-```
+   ```bash
+   sudo mv pfind-MacOS /usr/local/bin/pfind
+   ```
 
 ---
 
