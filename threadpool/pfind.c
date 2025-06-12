@@ -22,6 +22,8 @@ void findWithRegex(void *arg);
 int matchPattern(const char *filename, const char *pattern);
 static struct option long_options[];
 
+int matchContent = 0;
+
 // 任务体结构体
 struct taskBody
 {
@@ -48,7 +50,7 @@ int main(const int argc, char *argv[])
 
     // 解析命令行参数
     opterr = 0;
-    const char *shortOpts = "p:r:n:o:h";
+    const char *shortOpts = "p:r:n:o:ch";
     int ch;
     while ((ch = getopt_long(argc, argv, shortOpts, long_options, NULL)) != -1)
     {
@@ -65,6 +67,9 @@ int main(const int argc, char *argv[])
                 break;
             case 'o':
                 outfile = optarg;
+                break;
+            case 'c':
+                matchContent = 1;
                 break;
 
             case 'h':
@@ -233,7 +238,6 @@ void findWithPattern(void *arg)
         struct stat st;
         if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
         {
-            // 文件名匹配
             if (matchPattern(entry->d_name, namePattern))
             {
                 pthread_mutex_lock(&file_mutex);
@@ -241,7 +245,7 @@ void findWithPattern(void *arg)
                 pthread_mutex_unlock(&file_mutex);
             }
 
-            // 文件内容匹配
+            if (!matchContent) continue;
             FILE *fp = fopen(fullpath, "r");
             if (fp)
             {
@@ -298,14 +302,12 @@ void findWithRegex(void *arg)
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
             continue;
 
-        // 拼接完整路径
         char fullpath[1024];
         snprintf(fullpath, sizeof(fullpath), "%s/%s", path, entry->d_name);
 
         struct stat st;
         if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
         {
-            // 文件名匹配
             if (regexec(reg, entry->d_name, 0, NULL, 0) == 0)
             {
                 pthread_mutex_lock(&file_mutex);
@@ -313,7 +315,7 @@ void findWithRegex(void *arg)
                 pthread_mutex_unlock(&file_mutex);
             }
 
-            // 文件内容匹配
+            if (!matchContent) continue;
             FILE *fp = fopen(fullpath, "r");
             if (fp)
             {
@@ -406,6 +408,7 @@ static struct option long_options[] =
     {"regex", 1, NULL, 'r'},
     {"name", 1, NULL, 'n'},
     {"output", 1, NULL, 'o'},
+    {"content", 0, NULL, 'c'},
     {"help", 0, NULL, 'h'},
     {0,0,0,0}
 };
