@@ -23,6 +23,12 @@
    pfind -p ./tests -r ".*_test\.py$"
    ```
 
+3. **On Windows, find specific log files**
+
+   ```bash
+    pfind -p C:\logs -n "*.log" -o logs.txt
+    ```
+
 ---
 
 ## Download & Installation

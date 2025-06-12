@@ -21,7 +21,13 @@
    ```bash
    pfind -p ./tests -r ".*_test\.py$"
    ```
+   
+3. **在Windows系统下查找特定格式的日志文件**
 
+   ```bash
+    pfind -p C:\logs -n "*.log" -o logs.txt
+    ```
+   
 ---
 
 ## 下载与安装

@@ -20,6 +20,7 @@ CMakeLists.txt.user
 .cmake/
 .clion/
 workspace.xml
+.xml
 
 # CMake生成的文件
 CMakeCache.txt

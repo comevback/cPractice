@@ -265,7 +265,7 @@ void threadDestroy(struct ThreadPool *pool)
         if (tid == pool->workers[i])
         {
             pool->workers[i] = 0;
-            printf("[Action] Destroy the thread %ld\n", (long int)tid);
+            printf("[Action] Destroy the thread [%ld]\n", (long int)tid);
             printf("[Status] Total live threads: %d\n", pool->liveNum);
             break;
         }
