@@ -28,6 +28,7 @@ int matchContent = 0;
 struct taskBody
 {
     char *path;
+    char *name; // 文件名
     char *namePattern;
     regex_t *reg;
     FILE *write;
@@ -149,36 +150,6 @@ int main(const int argc, char *argv[])
  */
 void traverseAndScheduleSearch(const char *path, char* namePattern, regex_t *reg, FILE *write, struct ThreadPool *pool)
 {
-    // 在堆中构造任务体，释放是在regex函数中完成的
-    struct taskBody *task_body = malloc(sizeof(struct taskBody));
-    task_body->path = malloc(sizeof(char) * 1024);
-    task_body->namePattern = namePattern;
-    task_body->write = write;
-    strcpy(task_body->path, path);
-
-    // 如果有正则表达式，则使用正则表达式匹配函数，否则使用模式匹配函数
-    if (reg != NULL)
-    {
-        task_body->reg = reg;
-        // 如果有正则表达式，则添加到线程池中执行
-        int ret = ThreadPoolAdd(pool, findWithRegex, task_body);
-        if (ret != 0) {
-            printf("[Error] Fail to add task to thread pool: %d\n", ret);
-            free(task_body->path);
-            free(task_body);
-            return;
-        }
-    } else
-    {
-        int ret = ThreadPoolAdd(pool, findWithPattern, task_body);
-        if (ret != 0) {
-            printf("[Error] Fail to add task to thread pool: %d\n", ret);
-            free(task_body->path);
-            free(task_body);
-            return;
-        }
-    }
-
     DIR *dir = opendir(path);
     if (!dir) {
         printf("[warning] Can not open dir:  %s\n", path);
@@ -201,6 +172,43 @@ void traverseAndScheduleSearch(const char *path, char* namePattern, regex_t *reg
             traverseAndScheduleSearch(newPath, namePattern, reg, write, pool);
             free(newPath);
         }
+
+        if (entry->d_type == DT_REG)
+        {
+            // 在堆中构造任务体，释放是在regex函数中完成的
+            struct taskBody *task_body = malloc(sizeof(struct taskBody));
+            task_body->name = strdup(entry->d_name);
+            task_body->namePattern = namePattern;
+            task_body->write = write;
+
+            char fullpath[1024];
+            snprintf(fullpath, sizeof(fullpath), "%s/%s", path, entry->d_name);
+            task_body->path = malloc(strlen(fullpath) + 1);
+            strcpy(task_body->path, fullpath);
+
+            // 如果有正则表达式，则使用正则表达式匹配函数，否则使用模式匹配函数
+            if (reg != NULL)
+            {
+                task_body->reg = reg;
+                // 如果有正则表达式，则添加到线程池中执行
+                int ret = ThreadPoolAdd(pool, findWithRegex, task_body);
+                if (ret != 0) {
+                    printf("[Error] Fail to add task to thread pool: %d\n", ret);
+                    free(task_body->path);
+                    free(task_body);
+                    return;
+                }
+            } else
+            {
+                int ret = ThreadPoolAdd(pool, findWithPattern, task_body);
+                if (ret != 0) {
+                    printf("[Error] Fail to add task to thread pool: %d\n", ret);
+                    free(task_body->path);
+                    free(task_body);
+                    return;
+                }
+            }
+        }
     }
     closedir(dir);
 }
@@ -214,38 +222,23 @@ void traverseAndScheduleSearch(const char *path, char* namePattern, regex_t *reg
 void findWithPattern(void *arg)
 {
     struct taskBody *task = (struct taskBody*)arg;
-    char *path = task->path;
+    char *fullpath = task->path;
+    char *name = task->name;
     char *namePattern = task->namePattern;
     FILE *write = task->write;
 
-    DIR *dir = opendir(path);
-    if (!dir) {
-        printf("[warning] Can not open dir:  %s\n", path);
-        free(task->path);
-        free(task);
-        return;
-    }
-
-    struct dirent *entry;
-    while ((entry = readdir(dir)) != NULL)
+    struct stat st;
+    if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
     {
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
-            continue;
-
-        char fullpath[1024];
-        snprintf(fullpath, sizeof(fullpath), "%s/%s", path, entry->d_name);
-
-        struct stat st;
-        if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
+        if (matchPattern(name, namePattern))
         {
-            if (matchPattern(entry->d_name, namePattern))
-            {
-                pthread_mutex_lock(&file_mutex);
-                fprintf(write, "Matched the file: %s\n", fullpath);
-                pthread_mutex_unlock(&file_mutex);
-            }
+            pthread_mutex_lock(&file_mutex);
+            fprintf(write, "Matched the file: %s\n", fullpath);
+            pthread_mutex_unlock(&file_mutex);
+        }
 
-            if (!matchContent) continue;
+        if (matchContent)
+        {
             FILE *fp = fopen(fullpath, "r");
             if (fp)
             {
@@ -267,10 +260,9 @@ void findWithPattern(void *arg)
         }
     }
 
-    closedir(dir);
     free(task->path);
     free(task);
-    usleep(1000);
+    // usleep(1000);
     return;
 }
 
@@ -284,38 +276,23 @@ void findWithPattern(void *arg)
 void findWithRegex(void *arg)
 {
     struct taskBody *task = (struct taskBody*)arg;
-    char *path = task->path;
+    char *fullpath = task->path;
+    char *name = task->name;
     const regex_t *reg = task->reg;
     FILE *write = task->write;
 
-    DIR *dir = opendir(path);
-    if (!dir) {
-        printf("[warning] Can not open dir:  %s\n", path);
-        free(task->path);
-        free(task);
-        return;
-    }
-
-    struct dirent *entry;
-    while ((entry = readdir(dir)) != NULL)
+    struct stat st;
+    if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
     {
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
-            continue;
-
-        char fullpath[1024];
-        snprintf(fullpath, sizeof(fullpath), "%s/%s", path, entry->d_name);
-
-        struct stat st;
-        if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
+        if (regexec(reg, name, 0, NULL, 0) == 0)
         {
-            if (regexec(reg, entry->d_name, 0, NULL, 0) == 0)
-            {
-                pthread_mutex_lock(&file_mutex);
-                fprintf(write, "Matched the file: %s\n", fullpath);
-                pthread_mutex_unlock(&file_mutex);
-            }
+            pthread_mutex_lock(&file_mutex);
+            fprintf(write, "Matched the file: %s\n", fullpath);
+            pthread_mutex_unlock(&file_mutex);
+        }
 
-            if (!matchContent) continue;
+        if (matchContent)
+        {
             FILE *fp = fopen(fullpath, "r");
             if (fp)
             {
@@ -341,10 +318,9 @@ void findWithRegex(void *arg)
         }
     }
 
-    closedir(dir);
     free(task->path);
     free(task);
-    usleep(1000);
+    // usleep(1000);
     return;
 }
 

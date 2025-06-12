@@ -207,7 +207,7 @@ int ThreadPoolAdd(struct ThreadPool *pool, void (*func)(void *arg), void *arg)
 
     pthread_mutex_lock(&pool->mutex_pool);
 
-    while (pool->QueueSize == pool->QueueCapacity && !pool->shutdown)
+    while (pool->QueueSize >= pool->QueueCapacity && !pool->shutdown)
     {
         pthread_cond_wait(&pool->not_full, &pool->mutex_pool);
     }
