@@ -274,5 +274,3 @@ ThreadPoolWaitAndDestroy(pool);
 * **动态伸缩**：管理线程按任务量增减工作线程
 * **安全同步**：互斥锁 + 条件变量，保证队列和计数器一致性
 * **简洁接口**：`Create`／`Add`／`WaitAndDestroy`／`Destroy`
-
-以上即为对 `threadpool` 模块的整理与格式化。
