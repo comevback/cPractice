@@ -19,6 +19,7 @@ cmake-build-*/
 CMakeLists.txt.user
 .cmake/
 .clion/
+workspace.xml
 
 # CMake生成的文件
 CMakeCache.txt
