@@ -223,23 +223,43 @@ void findWithPattern(void *arg)
     }
 
     struct dirent *entry;
-    char fullpath[PATH_MAX];
-    struct stat st;
-
     while ((entry = readdir(dir)) != NULL)
     {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
             continue;
 
+        char fullpath[PATH_MAX];
         snprintf(fullpath, sizeof(fullpath), "%s/%s", path, entry->d_name);
 
+        struct stat st;
         if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
         {
+            // 文件名匹配
             if (matchPattern(entry->d_name, namePattern))
             {
                 pthread_mutex_lock(&file_mutex);
-                fprintf(write, "Matched the file: %s : %s\n", fullpath, entry->d_name);
+                fprintf(write, "Matched the file: %s\n", fullpath);
                 pthread_mutex_unlock(&file_mutex);
+            }
+
+            // 文件内容匹配
+            FILE *fp = fopen(fullpath, "r");
+            if (fp)
+            {
+                char line[1024];
+                int lineno = 0;
+                while (fgets(line, sizeof(line), fp))
+                {
+                    lineno++;
+                    if (matchPattern(line, namePattern))
+                    {
+                        pthread_mutex_lock(&file_mutex);
+                        fprintf(write, "Matched in file: %s\n", fullpath);
+                        fprintf(write, "=> %s [Line %d]\n\n", line, lineno);
+                        pthread_mutex_unlock(&file_mutex);
+                    }
+                }
+                fclose(fp);
             }
         }
     }
@@ -273,23 +293,48 @@ void findWithRegex(void *arg)
     }
 
     struct dirent *entry;
-    char fullpath[PATH_MAX];
-    struct stat st;
-
     while ((entry = readdir(dir)) != NULL)
     {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
             continue;
 
+        // 拼接完整路径
+        char fullpath[PATH_MAX];
         snprintf(fullpath, sizeof(fullpath), "%s/%s", path, entry->d_name);
 
+        struct stat st;
         if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
         {
+            // 文件名匹配
             if (regexec(reg, entry->d_name, 0, NULL, 0) == 0)
             {
                 pthread_mutex_lock(&file_mutex);
-                fprintf(write, "Matched the file: %s : %s\n", fullpath, entry->d_name);
+                fprintf(write, "Matched the file: %s\n", fullpath);
                 pthread_mutex_unlock(&file_mutex);
+            }
+
+            // 文件内容匹配
+            FILE *fp = fopen(fullpath, "r");
+            if (fp)
+            {
+                char line[1024];
+                int lineno = 0;
+                regmatch_t match[1];
+                while (fgets(line, sizeof(line), fp))
+                {
+                    lineno++;
+                    if (regexec(reg, line, 1, match, 0) == 0)
+                    {
+                        pthread_mutex_lock(&file_mutex);
+                        fprintf(write, "Matched in file: %s\n", fullpath);
+                        fprintf(write, "=> %s [Line %d, Col %lld]\n", line, lineno, match[0].rm_so + 1);
+                        fprintf(write, "   ");
+                        for (int i = 0; i < match[0].rm_so; i++) fputc(' ', write);
+                        fprintf(write, "^\n");
+                        pthread_mutex_unlock(&file_mutex);
+                    }
+                }
+                fclose(fp);
             }
         }
     }
