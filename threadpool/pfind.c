@@ -10,6 +10,7 @@
 #include <regex.h>
 #include <sys/time.h>
 #include <pthread.h>
+#include <sys/stat.h>
 #include "threadpool.h"
 
 // 全局文件写入互斥锁，防止多线程同时写入同一文件导致数据混乱
@@ -265,22 +266,57 @@ void findWithRegex(void *arg)
     struct dirent *entry;
     while ((entry = readdir(dir)) != NULL)
     {
-        if (entry->d_type == DT_REG)
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+            continue;
+
+        // 拼接完整路径
+        char fullpath[1024];
+        snprintf(fullpath, sizeof(fullpath), "%s/%s", path, entry->d_name);
+
+        struct stat st;
+        if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
         {
+            // 文件名匹配
             if (regexec(reg, entry->d_name, 0, NULL, 0) == 0)
             {
                 pthread_mutex_lock(&file_mutex);
-                fprintf(write, "Matched the file: %s : %s\n", path, entry->d_name);
+                fprintf(write, "Matched the file: %s\n", fullpath);
                 pthread_mutex_unlock(&file_mutex);
+            }
+
+            // 文件内容匹配
+            FILE *fp = fopen(fullpath, "r");
+            if (fp)
+            {
+                char line[1024];
+                int lineno = 0;
+                regmatch_t match[1];
+                while (fgets(line, sizeof(line), fp))
+                {
+                    lineno++;
+                    if (regexec(reg, line, 1, match, 0) == 0)
+                    {
+                        pthread_mutex_lock(&file_mutex);
+                        fprintf(write, "Matched in file: %s\n", fullpath);
+                        fprintf(write, "=> %s [Line %d, Col %lld]\n", line, lineno, match[0].rm_so + 1);
+                        fprintf(write, "   ");
+                        for (int i = 0; i < match[0].rm_so; i++) fputc(' ', write);
+                        fprintf(write, "^\n");
+                        pthread_mutex_unlock(&file_mutex);
+                    }
+                }
+                fclose(fp);
             }
         }
     }
+
     closedir(dir);
     free(task->path);
-    free(task); // 释放任务体内存
-    usleep(1000); // 模拟处理时间
+    free(task);
+    // usleep(1000);
     return;
 }
+
 
 /* * 模式匹配函数
  * 该函数使用递归方式实现通配符模式匹配
