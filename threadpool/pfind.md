@@ -27,7 +27,28 @@
    ```bash
     pfind -p C:\logs -n "*.log" -o logs.txt
     ```
-   
+4. **在当前目录的文件中查找有 "malloc" 行**
+
+    ```bash
+    pfind -p . -n "*malloc*" -c
+    ```
+
+---
+
+### 输出格式（匹配内容时）
+
+匹配内容时，将输出如下格式，标明**文件路径、行号、匹配位置**：
+
+    ```
+    Matched in file: ./example.c  
+    =>     int *ptr = malloc(100); [Line 42, Col 14]  
+                     ^
+    ```
+
+* 每条匹配内容前以 `Matched in file:` 标识
+* 显示匹配行内容和对应的行号、列号（列号从 1 开始）
+* 使用 `^` 指向正则表达式首次匹配的位置
+
 ---
 
 ## 下载与安装
@@ -80,6 +101,7 @@ Usage: pfind [options]
   -n, --name <pattern>    按通配符匹配文件名，支持 '*'（任意长度）和 '?'（单字符）
   -r, --regex <pattern>   按 POSIX 扩展正则表达式匹配文件名
   -o, --output <file>     将匹配结果写入指定文件（追加模式），默认输出到标准输出
+  -c, --content           启用文件内容匹配（默认只匹配文件名）
   -h, --help              显示本帮助信息并退出
 ```
 

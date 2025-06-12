@@ -25,9 +25,28 @@
 
 3. **On Windows, find specific log files**
 
-   ```bash
+    ```bash
     pfind -p C:\logs -n "*.log" -o logs.txt
     ```
+4. **Search for files in the current directory containing "malloc"**
+    
+    ```bash
+    pfind -p . -n "*malloc*" -c
+    ```
+---
+
+### Output Format (when matching content)
+
+When matching content, the output will indicate **file path, line number, and match position**:
+
+    ```Matched in file: ./example.c
+    =>     int *ptr = malloc(100); [Line 42, Col 14]
+                     ^
+    ```
+
+* Each match starts with `Matched in file:`
+* Shows the matching line content along with the line number and column number (column starts from 1)
+* Uses `^` to indicate the position of the first match in the regex
 
 ---
 
