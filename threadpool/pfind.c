@@ -109,7 +109,6 @@ int main(const int argc, char *argv[])
         if (regcomp(&real_reg, nameRegex, REG_EXTENDED) != 0)
         {
             printf("Fail to compile the regex %s\n", nameRegex);
-            regfree(&real_reg);
             return 1;
         }
         reg = &real_reg;
@@ -225,22 +224,52 @@ void findWithPattern(void *arg)
     struct dirent *entry;
     while ((entry = readdir(dir)) != NULL)
     {
-        if (entry->d_type == DT_REG)
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+            continue;
+
+        char fullpath[1024];
+        snprintf(fullpath, sizeof(fullpath), "%s/%s", path, entry->d_name);
+
+        struct stat st;
+        if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
         {
+            // 文件名匹配
             if (matchPattern(entry->d_name, namePattern))
             {
                 pthread_mutex_lock(&file_mutex);
-                fprintf(write ,"Matched the file: %s : %s\n", path, entry->d_name);
+                fprintf(write, "Matched the file: %s\n", fullpath);
                 pthread_mutex_unlock(&file_mutex);
+            }
+
+            // 文件内容匹配
+            FILE *fp = fopen(fullpath, "r");
+            if (fp)
+            {
+                char line[1024];
+                int lineno = 0;
+                while (fgets(line, sizeof(line), fp))
+                {
+                    lineno++;
+                    if (matchPattern(line, namePattern))
+                    {
+                        pthread_mutex_lock(&file_mutex);
+                        fprintf(write, "Matched in file: %s\n", fullpath);
+                        fprintf(write, "=> %s [Line %d]\n\n", line, lineno);
+                        pthread_mutex_unlock(&file_mutex);
+                    }
+                }
+                fclose(fp);
             }
         }
     }
+
     closedir(dir);
     free(task->path);
-    free(task); // 释放任务体内存
-    usleep(1000); // 模拟处理时间
+    free(task);
+    usleep(1000);
     return;
 }
+
 
 /* * 正则表达式匹配函数
  * 该函数会在一个线程中执行，处理指定路径下的文件
@@ -313,7 +342,7 @@ void findWithRegex(void *arg)
     closedir(dir);
     free(task->path);
     free(task);
-    // usleep(1000);
+    usleep(1000);
     return;
 }
 
